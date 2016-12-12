@@ -1,0 +1,10 @@
+prefix=/root/MXNet/mxnet
+libdir=${prefix}/lib/
+includedir=${prefix}/include
+Name: mxnet
+Description: custom pc file
+Version: x.x.x
+URL: https://github.com/dmlc/mxnet
+Libs: -L${libdir} -lmxnet
+Libs.private: -L${libdir} -lmxnet
+Cflags: -I${includedir}

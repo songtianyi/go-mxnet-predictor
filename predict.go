@@ -2,9 +2,9 @@ package main
 
 /*
 // go preamble
-#cgo CPPFLAGS: -I/data/dockerbuilder/mxnet/mxnet/include/
-#cgo LDFLAGS: -L/data/dockerbuilder/mxnet/mxnet/src/
+#cgo pkg-config: mxnet
 #include <mxnet/c_predict_api.h>
+#include <stdlib.h>
 */
 import "C"
 import (
@@ -24,14 +24,21 @@ func MXPredCreate(symbol []byte,
 ) {
 
 	var (
-		keys      = make([]*C.char, 0)
-		shapeIdx  = []C.mx_uint{0}
-		shapeData = []C.mx_uint{}
+		pc *C.char
+		shapeIdx  = []uint32{0}
+		shapeData = []uint32{}
 	)
+
+	// malloc for **char which like [][]string to store node keys 
+	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc)))
+	// free it by ourself, go gc won't do that for us
+	defer C.free(unsafe.Pointer(keys))
 	for i := 0; i < len(nodes); i++ {
-		keys = append(keys, C.CString(nodes[i].Key))
-		shapeInx = append(shapeInx, C.mx_uint(len(nodes[i].Shape)))
-		shapeData = append(shapeData, C.mx_uint(nodes[i].Shape)...)
+		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
+		*p = C.CString(nodes[i].Key)
+
+		shapeIdx = append(shapeIdx, uint32(len(nodes[i].Shape)))
+		shapeData = append(shapeData, nodes[i].Shape...)
 	}
 	var handle C.PredictorHandle
 
@@ -42,10 +49,17 @@ func MXPredCreate(symbol []byte,
 		C.int(devId),
 		C.mx_uint(len(nodes)),
 		(**C.char)(keys),
-		(*C.mx_uint)(&shapeInx[0]),
+		(*C.mx_uint)(&shapeIdx[0]),
 		(*C.mx_uint)(&shapeData[0]),
 		handle,
 	)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if success < 0 {
+		return
+	}
 	fmt.Println(handle)
 }
 
