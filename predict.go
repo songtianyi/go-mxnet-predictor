@@ -31,8 +31,6 @@ func MXPredCreate(symbol []byte,
 
 	// malloc for **char which like [][]string to store node keys 
 	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc)))
-	// free it by ourself, go gc won't do that for us
-	defer C.free(unsafe.Pointer(keys))
 	for i := 0; i < len(nodes); i++ {
 		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
 		*p = C.CString(nodes[i].Key)
@@ -53,6 +51,13 @@ func MXPredCreate(symbol []byte,
 		(*C.mx_uint)(&shapeData[0]),
 		handle,
 	)
+
+	// free mem we created, go gc won't do that for us
+	defer C.free(unsafe.Pointer(keys))
+	for i := 0; i < len(nodes);i++ {
+		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
+		C.free(unsafe.Pointer(*p))
+	}
 	if err != nil {
 		fmt.Println(err)
 		return
