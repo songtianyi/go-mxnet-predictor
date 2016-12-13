@@ -64,31 +64,33 @@ func CreatePredictor(symbol []byte,
 	if success < 0 {
 		return nil, fmt.Errorf("Create predictor fail, C.MXPredCreate return %d", success)
 	}
-	return &Predictor{
-		handle: handle,
-	}, nil
+	return &Predictor{handle: handle}, nil
 }
 
-func (*s Predictor) Forward() error {
+func (s *Predictor) Forward() error {
 	success, err := C.MXPredForward(s.handle)
-		if err != nil {
-			return err
-		}else if success < 0 {
-			return fmt.Errorf("Run forward pass fail, C.MXPredForward return %d", success)
-		}
+	if err != nil {
+		return err
+	} else if success < 0 {
+		return fmt.Errorf("Run forward pass fail, C.MXPredForward return %d", success)
+	}
+	return nil
 }
 
-func (*s Predictor) GetOutputShape(index uint32) ([][]uint32, []uint32, error){
+func (s *Predictor) GetOutputShape(index uint32) ([][]uint32, []uint32, error) {
 	var (
-			shapeData = [][]uint32{{}}
-			shapeDim = []uint32{}
+		shapeData = [][]uint32{{}}
+		shapeDim  = []uint32{}
 	)
-	success, err := C.MXPredGetOutputShape(s.handle, C.mx_uint(index), (**C.mx_uint)(unsafe.Pointer(&shapeData[0][0])), (*C.mx_uint)(unsafe.Pointer(&shapeDim[0])))
+	success, err := C.MXPredGetOutputShape(s.handle,
+		C.mx_uint(index),
+		(**C.mx_uint)(unsafe.Pointer(&shapeData[0][0])),
+		(*C.mx_uint)(unsafe.Pointer(&shapeDim[0])),
+	)
 	if err != nil {
 		return nil, nil, err
-	}else if success < 0 {
+	} else if success < 0 {
 		return nil, nil, fmt.Errorf("GetOutputShape fail, C.MXPredGetOutputShape return %d", success)
 	}
 	return shapeData, shapeDim, nil
 }
-

@@ -12,5 +12,5 @@ const (
 
 type Deivce struct {
 	Type int
-	Id int	
+	Id   int
 }
