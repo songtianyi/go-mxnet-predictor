@@ -18,7 +18,7 @@ type Predictor struct {
 
 func CreatePredictor(symbol []byte,
 	params []byte,
-	device Device,
+	device *Device,
 	nodes []InputNode,
 ) (*Predictor, error) {
 
