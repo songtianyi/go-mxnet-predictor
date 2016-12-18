@@ -32,6 +32,7 @@ func CreatePredictor(symbol []byte,
 	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc)))
 	for i := 0; i < len(nodes); i++ {
 		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
+		// it will be free later when we free shapeData
 		*p = C.CString(nodes[i].Key)
 
 		shapeIdx = append(shapeIdx, uint32(len(nodes[i].Shape)))
@@ -67,6 +68,16 @@ func CreatePredictor(symbol []byte,
 	return &Predictor{handle: handle}, nil
 }
 
+func (s *Predictor) SetInput(key string, data []float32) error {
+	k := C.CString(key)	
+	defer C.free(unsafe.Pointer(k))
+	  if n, err := C.MXPredSetInput(s.handle, k, (*C.mx_float)(unsafe.Pointer(&data[0]))); err != nil {
+                return err
+        } else if n < 0 {
+                return GetLastError()
+        }
+}
+
 func (s *Predictor) Forward() error {
 	success, err := C.MXPredForward(s.handle)
 	if err != nil {
@@ -94,3 +105,4 @@ func (s *Predictor) GetOutputShape(index uint32) ([][]uint32, []uint32, error) {
 	}
 	return shapeData, shapeDim, nil
 }
+
