@@ -10,7 +10,7 @@ const (
 	GPU_DEVICE
 )
 
-type Deivce struct {
+type Device struct {
 	Type int
 	Id   int
 }
