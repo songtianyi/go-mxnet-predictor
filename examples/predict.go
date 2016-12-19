@@ -20,7 +20,7 @@ func main() {
 		bits := binary.LittleEndian.Uint32(mb[i*4:(i+1)*4])
 		rgb3c[i] = math.Float32frombits(bits)
 	}
-	fmt.Println(rgb3c[0: 100])
+	//fmt.Println(rgb3c[0: 100])
 
 	filePath := "flowertest.jpg"
 	img, err := imgio.Open(filePath)
@@ -29,13 +29,13 @@ func main() {
 	}
 
 	resized := transform.Resize(img, 299, 299, transform.Linear)
-	fmt.Println(resized)
-	_, err = mxnet.CvtImageTo1DArray(resized, rgb3c)
+	//fmt.Println(resized)
+	res, err := mxnet.CvtImageTo1DArray(resized, rgb3c)
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(res)
-	// blend.Subtract()
+	fmt.Println()
+	fmt.Println(res)
 
 	//symbol, err := ioutil.ReadFile("./Inception-symbol.json")
 	//if err != nil {

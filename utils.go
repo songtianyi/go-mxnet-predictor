@@ -35,13 +35,14 @@ func CvtImageTo1DArray(src image.Image, meanm []float32) ([]float32, error) {
 	res := make([]float32, h*w*3)
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
-			r, g, b, alpha := src.At(x+b.Min.X, y+b.Min.Y).RGBA()
+			r, g, b, _ := src.At(x+b.Min.X, y+b.Min.Y).RGBA()
+			//fmt.Println(r>>8, g>>8, b>>8)
 			//res[y*w+x] = float32(r>>8) - meanm[y*w+x]
 			//res[w*h+y*w+x] = float32(g>>8) - meanm[w*h+y*w+x]
 			//res[2*w*h+y*w+x] = float32(b>>8) - meanm[2*w*h+y*w+x]
-			res[y*w+x] = float32(r) - meanm[y*w+x]
-			res[w*h+y*w+x] = float32(g) - meanm[w*h+y*w+x]
-			res[2*w*h+y*w+x] = float32(b) - meanm[2*w*h+y*w+x]
+			res[y*w+x] = float32(r>>8)
+			res[w*h+y*w+x] = float32(g>>8)
+			res[2*w*h+y*w+x] = float32(b>>8)
 		}
 	}
 
