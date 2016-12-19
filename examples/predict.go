@@ -3,13 +3,8 @@ package main
 import (
 	"fmt"
 	"math"
-	//"image"
-	//"os"
-	//"io"
 	"io/ioutil"
 	"encoding/binary"
-	//"github.com/lazywei/go-opencv/opencv"
-	//"github.com/anthonynsimon/bild/blend"
 	"github.com/anthonynsimon/bild/imgio"
 	"github.com/anthonynsimon/bild/transform"
 	"github.com/songtianyi/go-mxnet-predictor"
@@ -24,26 +19,10 @@ func main() {
 	for i := 0;i < len(mb)/4;i++ {
 		bits := binary.LittleEndian.Uint32(mb[i*4:(i+1)*4])
 		rgb3c[i] = math.Float32frombits(bits)
-		//fmt.Print(rgb3c[i], ", ")
 	}
 	fmt.Println(rgb3c[0: 100])
-	fmt.Println(len(mb))
+
 	filePath := "flowertest.jpg"
-	//img := opencv.LoadImage(filePath)
-	//fmt.Println(img.Channels(), img.Depth(), img.Origin, img.Width(), img.Height())
-	//defer img.Release()
-	//dst := opencv.CreateImage(
-	//	img.Width(),
-	//	img.Height(),
-	//	img.Depth(), img.Channels())
-	//defer dst.Release()
-	//opencv.CvtColor(img, dst, 4)
-	//resized := opencv.Resize(dst, 299, 299, opencv.CV_INTER_LINEAR)
-	//defer resized.Release()
-
-	//m := resized.GetMat()
-	//fmt.Println(m.GetData(), m.Rows(), m.Cols(), resized.Width(), resized.Height(), m.Step(), len(m.GetData()))
-
 	img, err := imgio.Open(filePath)
 	if err != nil {
 		panic(err)
@@ -51,11 +30,11 @@ func main() {
 
 	resized := transform.Resize(img, 299, 299, transform.Linear)
 	fmt.Println(resized)
-	res, err := mxnet.CvtImageTo1DArray(resized, rgb3c)
+	_, err = mxnet.CvtImageTo1DArray(resized, rgb3c)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(res)
+	//fmt.Println(res)
 	// blend.Subtract()
 
 	//symbol, err := ioutil.ReadFile("./Inception-symbol.json")

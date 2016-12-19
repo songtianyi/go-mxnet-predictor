@@ -2,8 +2,7 @@ package mxnet
 
 /*
 // go preamble
-#cgo CFLAGS: -I/root/MXNet/mxnet/include/
-#cgo LDFLAGS: -L/root/MXNet/mxnet/lib/libmxnet.a  -Llibstdc++
+#cgo pkg-config: mxnet
 #include <mxnet/c_predict_api.h>
 #include <stdlib.h>
 */
