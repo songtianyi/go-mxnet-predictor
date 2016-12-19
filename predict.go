@@ -2,7 +2,8 @@ package mxnet
 
 /*
 // go preamble
-#cgo pkg-config: mxnet
+#cgo CFLAGS: -I/root/MXNet/mxnet/include/
+#cgo LDFLAGS: -L/root/MXNet/mxnet/lib/libmxnet.a  -Llibstdc++
 #include <mxnet/c_predict_api.h>
 #include <stdlib.h>
 */
@@ -71,11 +72,15 @@ func CreatePredictor(symbol []byte,
 func (s *Predictor) SetInput(key string, data []float32) error {
 	k := C.CString(key)	
 	defer C.free(unsafe.Pointer(k))
-	  if n, err := C.MXPredSetInput(s.handle, k, (*C.mx_float)(unsafe.Pointer(&data[0]))); err != nil {
+	if data == nil {
+		return fmt.Errorf("intput data nil")
+	}
+	if n, err := C.MXPredSetInput(s.handle, k, (*C.mx_float)(unsafe.Pointer(&data[0])), C.mx_uint(len(data))); err != nil {
                 return err
         } else if n < 0 {
                 return GetLastError()
         }
+	return nil
 }
 
 func (s *Predictor) Forward() error {

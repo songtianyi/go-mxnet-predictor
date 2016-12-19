@@ -5,6 +5,5 @@ Name: mxnet
 Description: custom pc file
 Version: x.x.x
 URL: https://github.com/dmlc/mxnet
-Libs: -L${libdir} -lmxnet
-Libs.private: -L${libdir} -lmxnet
+Libs: -L${libdir} -lmxnet -Llibstdc++
 Cflags: -I${includedir}
