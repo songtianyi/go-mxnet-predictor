@@ -30,28 +30,28 @@ func main() {
 
 	resized := transform.Resize(img, 299, 299, transform.Linear)
 	//fmt.Println(resized)
-	res, err := mxnet.CvtImageTo1DArray(resized, rgb3c)
+	_, err = mxnet.CvtImageTo1DArray(resized, rgb3c)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println()
-	fmt.Println(res)
+	//fmt.Println(res)
 
-	//symbol, err := ioutil.ReadFile("./Inception-symbol.json")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//params, err := ioutil.ReadFile("./Inception-0009.params")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//synset, err := os.Open("./synset.txt")
-	//if err != nil {
-	//	panic(err)
-	//}
+	symbol, err := ioutil.ReadFile("./102flowers-symbol.json")
+	if err != nil {
+		panic(err)
+	}
+	params, err := ioutil.ReadFile("./102flowers-0260.params")
+	if err != nil {
+		panic(err)
+	}
 
-	//p, err := mxnet.CreatePredictor(symbol, params, &mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
-	//if err != nil {
+	p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
+	if err != nil {
+		panic(err)
+	}
+	//if err := p.SetInput("data", res); err != nil {
 	//	panic(err)
 	//}
+	fmt.Println(p)
 }
