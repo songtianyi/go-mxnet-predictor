@@ -41,7 +41,7 @@ func CreatePredictor(symbol []byte,
 		// shape data for current node
 		shapeData = append(shapeData, nodes[i].Shape...)
 	}
-	fmt.Println(shapeIdx, shapeData)
+	fmt.Println(shapeIdx, shapeData, *(*C.mx_uint)(unsafe.Pointer(&shapeIdx[0])), C.mx_uint(len(nodes)), (**C.char)(keys))
 
 	var handle C.PredictorHandle
 
@@ -52,8 +52,8 @@ func CreatePredictor(symbol []byte,
 		C.int(device.Id),
 		C.mx_uint(len(nodes)),
 		(**C.char)(keys),
-		(*C.mx_uint)(&shapeIdx[0]),
-		(*C.mx_uint)(&shapeData[0]),
+		(*C.mx_uint)(unsafe.Pointer(&shapeIdx[0])),
+		(*C.mx_uint)(unsafe.Pointer(&shapeData[0])),
 		handle,
 	)
 	fmt.Println("C.MXPredCreate returned")
