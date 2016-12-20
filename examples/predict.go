@@ -37,11 +37,11 @@ func main() {
 	fmt.Println()
 	//fmt.Println(res)
 
-	symbol, err := ioutil.ReadFile("./102flowers-symbol.json")
+	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
 	if err != nil {
 		panic(err)
 	}
-	params, err := ioutil.ReadFile("./102flowers-0260.params")
+	params, err := ioutil.ReadFile("/data/102flowers-0260.params")
 	if err != nil {
 		panic(err)
 	}
