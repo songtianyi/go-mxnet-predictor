@@ -8,19 +8,18 @@ go:
 
 
 env:
-    - GOBIN=$TRAVIS_BUILD_DIR/bin
-	- MXNET=/root/MXNet
+    - MXNET=/root/MXNet
 
 install:
-	# copy
-	- cp tools/mxnet.pc /usr/lib/pkgconfig/
-	# dep for mxnet
-	- mkdir -p $MXNET
-	- cd $MXNET && git clone https://github.com/dmlc/mxnet.git --recursive
-	- cd $MXNET/mxnet && make -j2
-	- ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
+    # copy
+    - cp tools/mxnet.pc /usr/lib/pkgconfig/
+    # dep for mxnet
+    - mkdir -p $MXNET
+    - cd $MXNET && git clone https://github.com/dmlc/mxnet.git --recursive
+    - cd $MXNET/mxnet && make -j2
+    - ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
     # dep for example
-	- go get github.com/anthonynsimon/bild
+    - go get github.com/anthonynsimon/bild
     - go get github.com/songtianyi/go-mxnet-predictor
 
 script:
