@@ -18,8 +18,8 @@ func CvtImageTo1DArray(src image.Image, meanm []float32) ([]float32, error) {
 	}
 
 	b := src.Bounds()
-	h := b.Max.Y - b.Min.Y	// image height
-	w := b.Max.X - b.Min.X	// image width
+	h := b.Max.Y - b.Min.Y // image height
+	w := b.Max.X - b.Min.X // image width
 
 	res := make([]float32, len(meanm))
 	for y := 0; y < h; y++ {

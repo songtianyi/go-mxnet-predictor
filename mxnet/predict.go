@@ -14,7 +14,7 @@ import (
 
 // predictor for inference
 type Predictor struct {
-	handle C.PredictorHandle	// C handle of predictor
+	handle C.PredictorHandle // C handle of predictor
 }
 
 // Create a Predictor
@@ -100,7 +100,7 @@ func (s *Predictor) SetInput(key string, data []float32) error {
 		C.mx_uint(len(data)),
 	)
 
-   if err != nil {
+	if err != nil {
 		return err
 	} else if success < 0 {
 		return GetLastError()
