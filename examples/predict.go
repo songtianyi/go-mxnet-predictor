@@ -2,40 +2,35 @@ package main
 
 import (
 	"fmt"
-	"math"
-	"io/ioutil"
-	"encoding/binary"
 	"github.com/anthonynsimon/bild/imgio"
 	"github.com/anthonynsimon/bild/transform"
-	"github.com/songtianyi/go-mxnet-predictor"
+	"github.com/songtianyi/go-mxnet-predictor/mxnet"
+	"github.com/songtianyi/go-mxnet-predictor/utils"
+	"io/ioutil"
+	"sort"
 )
 
 func main() {
-	mb, err := ioutil.ReadFile("mean.matrix")
+	nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
 	if err != nil {
 		panic(err)
 	}
-	rgb3c := make([]float32, len(mb)/4)
-	for i := 0;i < len(mb)/4;i++ {
-		bits := binary.LittleEndian.Uint32(mb[i*4:(i+1)*4])
-		rgb3c[i] = math.Float32frombits(bits)
-	}
-	//fmt.Println(rgb3c[0: 100])
-
-	filePath := "flowertest.jpg"
-	img, err := imgio.Open(filePath)
+	defer nd.Free()
+	item, err := nd.Get(0)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println(item.Key, item.Data[0:10], item.Shape, item.Size)
 
+	img, err := imgio.Open("/data/flowertest.jpg")
+	if err != nil {
+		panic(err)
+	}
 	resized := transform.Resize(img, 299, 299, transform.Linear)
-	//fmt.Println(resized)
-	_, err = mxnet.CvtImageTo1DArray(resized, rgb3c)
+	res, err := utils.CvtImageTo1DArray(resized, item.Data)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println()
-	//fmt.Println(res)
 
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
 	if err != nil {
@@ -50,8 +45,33 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//if err := p.SetInput("data", res); err != nil {
-	//	panic(err)
-	//}
-	fmt.Println(p)
+	defer p.Free()
+	if err := p.SetInput("data", res); err != nil {
+		panic(err)
+	}
+	if err := p.Forward(); err != nil {
+		panic(err)
+	}
+	shape, err := p.GetOutputShape(0)
+	if err != nil {
+		panic(err)
+	}
+	//fmt.Println(shape)
+
+	size := uint32(1)
+	for _, v := range shape {
+		size *= v
+	}
+	data, err := p.GetOutput(0)
+	if err != nil {
+		panic(err)
+	}
+	idxs := make([]int, size)
+	for i := range data {
+		idxs[i] = i
+	}
+	as := utils.ArgSort{Args: data, Idxs: idxs}
+	sort.Sort(as)
+	fmt.Println(as)
+	fmt.Println("perfect")
 }
