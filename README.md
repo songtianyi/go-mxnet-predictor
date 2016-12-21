@@ -25,7 +25,7 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
 
 ## Part 2. Steps to build flower example
-###### 2.1 Get model files, mean.bin and input image and put them in correct path
+###### 2.1 Download model files, mean.bin and input image. Then put them in correct path
 
 ###### 2.2 Build predict.go
 	go build examples/flowers/predict.go
