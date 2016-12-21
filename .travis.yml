@@ -1,0 +1,29 @@
+language: go
+
+os:
+	- linux
+
+go:
+    - 1.5
+    - 1.6
+    - 1.7
+    - tip
+
+
+env:
+    - GOBIN=$TRAVIS_BUILD_DIR/bin
+	- MXNET=/root/MXNet
+
+install:
+	# dep for mxnet
+	- mkdir -p $MXNET
+	- cd $MXNET && git clone https://github.com/dmlc/mxnet.git --recursive
+	- cd $MXNET/mxnet && make -j2
+	- ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
+    # dep for example
+	- go get github.com/anthonynsimon/bild
+    - go get github.com/songtianyi/go-mxnet-predictor
+
+script:
+    - go build ./examples/flowers/predict.go
+
