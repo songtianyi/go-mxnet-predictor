@@ -1,8 +1,5 @@
 language: go
 
-os:
-	- linux
-
 go:
     - 1.5
     - 1.6
