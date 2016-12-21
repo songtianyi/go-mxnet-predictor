@@ -8,27 +8,27 @@
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as original C api, wish further development for higher level APIs.
 
 
-## Steps to get your own linux dev environment
-###### Get mxnet and build
+## 1 Steps to get your own linux dev environment
+###### 1.1 Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
 	cd /root/MXNet/mxnet && make -j2
 	ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
 
-###### Get go-mxnet-predictor
+###### 1.2 Get go-mxnet-predictor
 	go get github.com/anthonynsimon/bild
     go get -u -v github.com/songtianyi/go-mxnet-predictor
 
 A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
 
-## Steps to build flower example
-###### Get model files, mean.bin and input image and put them in correct path
+## 2 Steps to build flower example
+###### 2.1 Get model files, mean.bin and input image and put them in correct path
 
-###### Build predict.go
+###### 2.2 Build predict.go
 	go build examples/flowers/predict.go
 
-## Steps to do inference with go-mxnet-predictor
-###### 1. Load pre-trained model and create go predictor
+## 3 Steps to do inference with go-mxnet-predictor
+###### 3.1 Load pre-trained model and create go predictor
 	// load model
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
 	if err != nil {
@@ -46,7 +46,7 @@ A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.D
 	defer p.Free()
 	// see more details in examples/flowers/predict.go
 
-###### 2. Load input data and do preprocess
+###### 3.2 Load input data and do preprocess
 	// load test image for predction
 	img, err := imgio.Open("/data/flowertest.jpg")
 	if err != nil {
@@ -59,24 +59,21 @@ A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.D
 		panic(err)
 	}
 
-###### 3. Set input data to preditor
+###### 3.3 Set input data to preditor
 	// set input
 	if err := p.SetInput("data", res); err != nil {
 		panic(err)
 	}
-###### 4. Do predict
+###### 3.4 Do prediction
 	// do predict
 	if err := p.Forward(); err != nil {
 		panic(err)
 	}
 
-###### 5. Get prediction data
+###### 3.5 Get result
 	// get predict result
 	data, err := p.GetOutput(0)
 	if err != nil {
 		panic(err)
 	}
 	// see more details in examples/flowers/predict.go
-
-
-
