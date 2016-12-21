@@ -22,7 +22,7 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
 
 ## Steps to build flower example
-###### Get model files mean.bin and input image
+###### Get model files, mean.bin and input image and put them in correct path
 
 ###### Build predict.go
 	go build examples/flowers/predict.go
