@@ -4,13 +4,13 @@ go:
     - 1.7
     
 before_install:
-    - export LIBRARY_PATH=$LIBRARY_PATH:${PWD}/build/mxnet/lib/
-    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PWD}/build/mxnet/lib/
+    - export LIBRARY_PATH=$LIBRARY_PATH:${PWD}/travis/mxnet/lib/
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PWD}/travis/mxnet/lib/
     - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PWD}/tools/
 
 install:
-    - cd build && git clone https://github.com/dmlc/mxnet.git --recursive
-    - cd build/mxnet && make -j2
+    - cd travis && git clone https://github.com/dmlc/mxnet.git --recursive
+    - cd travis/mxnet && make -j2
     # dep for example
     - go get github.com/anthonynsimon/bild
     - go get github.com/songtianyi/go-mxnet-predictor
