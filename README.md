@@ -8,7 +8,7 @@
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as original C api, wish further development for higher level APIs.
 
 
-## Steps to get your own dev environment
+## Steps to get your own linux dev environment
 ###### Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
@@ -20,13 +20,23 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
     go get -u -v github.com/songtianyi/go-mxnet-predictor
 
 ## Steps to build flower example
-###### Get model files and input image
+###### Get model files mean.bin and input image
 
 ###### Build predict.go
-	go build examples/flowers/predicto.go
+	go build examples/flowers/predict.go
 
-## Steps to do inference
-###### 1. Load pre-trained model and Create go predictor
+## Steps to do inference with go-mxnet-predictor
+###### 1. Load pre-trained model and create go predictor
+	// load model
+	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
+	if err != nil {
+		panic(err)
+	}
+	params, err := ioutil.ReadFile("/data/102flowers-0260.params")
+	if err != nil {
+		panic(err)
+	}
+
 	p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
 	if err != nil {
 		panic(err)
@@ -58,7 +68,7 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 		panic(err)
 	}
 
-###### 5. get prediction data
+###### 5. Get prediction data
 	// get predict result
 	data, err := p.GetOutput(0)
 	if err != nil {
