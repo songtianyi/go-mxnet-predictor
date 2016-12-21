@@ -10,15 +10,15 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 
 ## Part 1. Steps to get your own linux dev environment
 ###### 1.1 Prerequisites
-	check [here](http://mxnet.io/get_started/setup.html#prerequisites)
+check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 
-###### 1.1 Get mxnet and build
+###### 1.2 Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
 	cd /root/MXNet/mxnet && make -j2
 	ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
 
-###### 1.2 Get go-mxnet-predictor
+###### 1.3 Get go-mxnet-predictor
 	go get github.com/anthonynsimon/bild
     go get -u -v github.com/songtianyi/go-mxnet-predictor
 
