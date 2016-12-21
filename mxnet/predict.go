@@ -12,10 +12,17 @@ import (
 	"unsafe"
 )
 
+// predictor for inference
 type Predictor struct {
-	handle C.PredictorHandle
+	handle C.PredictorHandle	// C handle of predictor
 }
 
+// Create a Predictor
+// go binding for MXPredCreate
+// param symbol The JSON string of the symbol
+// param params In-memory raw bytes of parameter ndarray file
+// param device Device to run predictor
+// param nodes An array of InputNode which stored the name and shape data of ndarray item
 func CreatePredictor(symbol []byte,
 	params []byte,
 	device Device,
@@ -28,7 +35,7 @@ func CreatePredictor(symbol []byte,
 		shapeData = []uint32{}
 	)
 
-	// malloc a **char which like [][]string to store node keys
+	// malloc a **char which like []string to store node keys
 	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc))) // c gc
 	for i := 0; i < len(nodes); i++ {
 		// get memory address
@@ -72,6 +79,10 @@ func CreatePredictor(symbol []byte,
 	return &Predictor{handle: handle}, nil
 }
 
+// set the input data of predictor
+// go binding for MXPredSetInput
+// param key The name of input node to set
+// param data The float data to be set
 func (s *Predictor) SetInput(key string, data []float32) error {
 	// check input
 	if data == nil || len(data) < 1 {
@@ -83,14 +94,22 @@ func (s *Predictor) SetInput(key string, data []float32) error {
 	// free mem before return
 	defer C.free(unsafe.Pointer(k))
 
-	if n, err := C.MXPredSetInput(s.handle, k, (*C.mx_float)(unsafe.Pointer(&data[0])), C.mx_uint(len(data))); err != nil {
+	success, err := C.MXPredSetInput(s.handle,
+		k,
+		(*C.mx_float)(unsafe.Pointer(&data[0])),
+		C.mx_uint(len(data)),
+	)
+
+   if err != nil {
 		return err
-	} else if n < 0 {
+	} else if success < 0 {
 		return GetLastError()
 	}
 	return nil
 }
 
+// run a forward pass after SetInput
+// go binding for MXPredForward
 func (s *Predictor) Forward() error {
 	success, err := C.MXPredForward(s.handle)
 	if err != nil {
@@ -101,6 +120,9 @@ func (s *Predictor) Forward() error {
 	return nil
 }
 
+// get the shape of output node
+// go binding for MXPredGetOutputShape
+// param index The index of output node, set to 0 if there is only one output
 func (s *Predictor) GetOutputShape(index uint32) ([]uint32, error) {
 	var (
 		shapeData *C.mx_uint
@@ -116,10 +138,14 @@ func (s *Predictor) GetOutputShape(index uint32) ([]uint32, error) {
 	} else if success < 0 {
 		return nil, GetLastError()
 	}
+	// c array to go
 	shape := (*[1 << 32]uint32)(unsafe.Pointer(shapeData))[:shapeDim:shapeDim]
 	return shape, nil
 }
 
+// get the output value of prediction
+// go binding for MXPredGetOutput
+// param index The index of output node, set to 0 if there is only one output
 func (s *Predictor) GetOutput(index uint32) ([]float32, error) {
 	shape, err := s.GetOutputShape(index)
 	if err != nil {
@@ -143,6 +169,8 @@ func (s *Predictor) GetOutput(index uint32) ([]float32, error) {
 	return data, nil
 }
 
+// free this predictor's C handle
+// go binding for MXPredFree
 func (s *Predictor) Free() error {
 	success, err := C.MXPredFree(s.handle)
 	if err != nil {

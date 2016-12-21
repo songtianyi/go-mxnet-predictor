@@ -11,6 +11,8 @@ import (
 	"fmt"
 )
 
+// get the last error happeneed.
+// go binding for MXGetLastError
 func GetLastError() error {
 	if err := C.MXGetLastError(); err != nil {
 		return fmt.Errorf(C.GoString(err))

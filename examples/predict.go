@@ -11,27 +11,23 @@ import (
 )
 
 func main() {
+
+	// load mean image from file
 	nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
 	if err != nil {
 		panic(err)
 	}
+	// free ndarray list operator before exit
 	defer nd.Free()
+
+	// get mean image data from C memory
 	item, err := nd.Get(0)
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(item.Key, item.Data[0:10], item.Shape, item.Size)
 
-	img, err := imgio.Open("/data/flowertest.jpg")
-	if err != nil {
-		panic(err)
-	}
-	resized := transform.Resize(img, 299, 299, transform.Linear)
-	res, err := utils.CvtImageTo1DArray(resized, item.Data)
-	if err != nil {
-		panic(err)
-	}
-
+	// load model
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
 	if err != nil {
 		panic(err)
@@ -41,37 +37,45 @@ func main() {
 		panic(err)
 	}
 
+	// create predictor
 	p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
 	if err != nil {
 		panic(err)
 	}
 	defer p.Free()
-	if err := p.SetInput("data", res); err != nil {
-		panic(err)
-	}
-	if err := p.Forward(); err != nil {
-		panic(err)
-	}
-	shape, err := p.GetOutputShape(0)
+
+	// load test image for predction
+	img, err := imgio.Open("/data/flowertest.jpg")
 	if err != nil {
 		panic(err)
 	}
-	//fmt.Println(shape)
-
-	size := uint32(1)
-	for _, v := range shape {
-		size *= v
+	// preprocess
+	resized := transform.Resize(img, 299, 299, transform.Linear)
+	res, err := utils.CvtImageTo1DArray(resized, item.Data)
+	if err != nil {
+		panic(err)
 	}
+
+	// set input
+	if err := p.SetInput("data", res); err != nil {
+		panic(err)
+	}
+	// do predict
+	if err := p.Forward(); err != nil {
+		panic(err)
+	}
+	// get predict result
 	data, err := p.GetOutput(0)
 	if err != nil {
 		panic(err)
 	}
-	idxs := make([]int, size)
+	idxs := make([]int, len(data))
 	for i := range data {
 		idxs[i] = i
 	}
 	as := utils.ArgSort{Args: data, Idxs: idxs}
 	sort.Sort(as)
-	fmt.Println(as)
-	fmt.Println("perfect")
+	fmt.Println("result:")
+	fmt.Println(as.Args)
+	fmt.Println(as.Idxs)
 }
