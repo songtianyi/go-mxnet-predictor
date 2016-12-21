@@ -9,13 +9,14 @@ go:
 
 env:
     - MXNET=/root/MXNet
+    - PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$MXNET/pkgconfig/
+    - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MXNET/mxnet/lib
 
 install:
     # copy
-    - mkdir -p /usr/local/lib/pkgconfig/
-    - cp tools/mxnet.pc /usr/local/lib/pkgconfig/
+    - mkdir -p $MXNET/pkgconfig/
+    - cp tools/mxnet.pc $MXNET/pkgconfig/
     # dep for mxnet
-    - mkdir -p $MXNET
     - cd $MXNET && git clone https://github.com/dmlc/mxnet.git --recursive
     - cd $MXNET/mxnet && make -j2
     - ln -s $MXNET/mxnet/lib/libmxnet.so /usr/local/lib/libmxnet.so
