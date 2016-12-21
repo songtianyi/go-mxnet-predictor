@@ -10,7 +10,7 @@ before_install:
 
 install:
     - cd travis && git clone https://github.com/dmlc/mxnet.git --recursive
-    - cd travis/mxnet && make -j2
+    - cd travis/mxnet && make
     # dep for example
     - go get github.com/anthonynsimon/bild
     - go get github.com/songtianyi/go-mxnet-predictor

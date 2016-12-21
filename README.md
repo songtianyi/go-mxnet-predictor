@@ -19,6 +19,8 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 	go get github.com/anthonynsimon/bild
     go get -u -v github.com/songtianyi/go-mxnet-predictor
 
+A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
+
 ## Steps to build flower example
 ###### Get model files mean.bin and input image
 
