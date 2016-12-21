@@ -8,7 +8,7 @@
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as original C api, wish further development for higher level APIs.
 
 
-## 1 Steps to get your own linux dev environment
+## Part 1. Steps to get your own linux dev environment
 ###### 1.1 Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
@@ -21,13 +21,13 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 
 A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
 
-## 2 Steps to build flower example
+## Part 2. Steps to build flower example
 ###### 2.1 Get model files, mean.bin and input image and put them in correct path
 
 ###### 2.2 Build predict.go
 	go build examples/flowers/predict.go
 
-## 3 Steps to do inference with go-mxnet-predictor
+## Part 3. Steps to do inference with go-mxnet-predictor
 ###### 3.1 Load pre-trained model and create go predictor
 	// load model
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
