@@ -1,25 +1,16 @@
 language: go
 
 go:
-    - 1.5
-    - 1.6
     - 1.7
-    - tip
-
-
-env:
-    - MXNET=/root/MXNet
-    - PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$MXNET/pkgconfig/
-    - LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MXNET/mxnet/lib
+    
+before_install:
+    - export LIBRARY_PATH=$LIBRARY_PATH:${PWD}/build/mxnet/lib/
+    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PWD}/build/mxnet/lib/
+	- export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PWD}/tools/
 
 install:
-    # copy
-    - mkdir -p $MXNET/pkgconfig/
-    - cp tools/mxnet.pc $MXNET/pkgconfig/
-    # dep for mxnet
-    - cd $MXNET && git clone https://github.com/dmlc/mxnet.git --recursive
-    - cd $MXNET/mxnet && make -j2
-    - ln -s $MXNET/mxnet/lib/libmxnet.so /usr/local/lib/libmxnet.so
+    - cd build && git clone https://github.com/dmlc/mxnet.git --recursive
+    - cd build/mxnet && make -j2
     # dep for example
     - go get github.com/anthonynsimon/bild
     - go get github.com/songtianyi/go-mxnet-predictor
