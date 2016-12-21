@@ -8,7 +8,7 @@
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as original C api, wish further development for higher level APIs.
 
 
-## Part 1. Steps to get your own linux dev environment
+## Part 1. Steps to build your own linux dev environment
 ##### 1.1 Prerequisites
 check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 
