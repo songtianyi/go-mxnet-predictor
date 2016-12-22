@@ -34,7 +34,7 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 ##### 2.2 Build flowers example
 	go build examples/flowers/predict.go
 
-##### 2.2 Run flowers example
+##### 2.3 Download example files
 To run this example, you need to download model files, mean.bin and input image.
 Then put them in correct path. These files are shared in dropbox.
 
@@ -43,7 +43,7 @@ Then put them in correct path. These files are shared in dropbox.
 * [flowertest.jpg](https://www.dropbox.com/s/9ej43gpkcdw3q32/flowertest.jpg?dl=0)
 * [mean.bin](https://www.dropbox.com/s/rg45ma97x886i53/mean.bin?dl=0)
 
-##### 2.3 Run example
+##### 2.4 Run example
 	./predict
 
 ## Part 3. Steps to do inference with go-mxnet-predictor
