@@ -1,7 +1,5 @@
 #!/bin/bash
-set -x
-MY_PATH="`dirname \"$0\"`"  # relative
-MY_PATH="`( cd \"$MY_PATH\" && pwd )`" # absolutized and normalized
+MPWD=`pwd`
 
 checkRet() {
 	ret=$1
@@ -12,14 +10,14 @@ checkRet() {
 	fi	
 }
 
-cd $MY_PATH/travis && git clone https://github.com/dmlc/mxnet.git --recursive
-cd $MY_PATH/travis/mxnet && make -j4
+cd $MPWD/travis && git clone https://github.com/dmlc/mxnet.git --recursive
+cd $MPWD/travis/mxnet && make -j4
 checkRet $?
 
 go get github.com/anthonynsimon/bild
 
-sed -i "s/MXNET_SRC_DIR/$MY_PATH\/travis\/mxnet/g" $MY_PATH/tools/mxnet.pc
-sudo cp $MY_PATH/tools/mxnet.pc /usr/local/lib/pkgconfig/
+sed -i "s/MXNET_SRC_DIR/$MPWD\/travis\/mxnet/g" $MPWD/tools/mxnet.pc
+sudo cp $MPWD/tools/mxnet.pc /usr/lib/pkgconfig/
 pkg-config --libs mxnet
 checkRet $?
 
