@@ -17,7 +17,7 @@ cd $MPWD/travis/mxnet && make -j4
 
 go get github.com/anthonynsimon/bild
 
-sed -i "s/MXNET_SRC_DIR/$MPWD\/travis\/mxnet/g" $MPWD/travis/mxnet.pc
+sed -i "/prefix=/c prefx=$MPWD" $MPWD/travis/mxnet.pc
 sudo cp $MPWD/travis/mxnet.pc /usr/lib/pkgconfig/
 pkg-config --libs mxnet
 checkRet $?

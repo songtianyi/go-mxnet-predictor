@@ -1,4 +1,4 @@
-prefix=MXNET_SRC_DIR
+prefix=/root/MXNet/mxnet
 libdir=${prefix}/lib/
 includedir=${prefix}/include
 Name: mxnet
