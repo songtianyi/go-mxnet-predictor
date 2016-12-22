@@ -9,6 +9,8 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 
 
 ## Part 1. Steps to build your own linux dev environment
+A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/gmp.Dockerfile) is offered for building development env. You could skip Part1 by using Docker
+
 ##### 1.1 Prerequisites
 check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 
@@ -22,7 +24,6 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 	go get github.com/anthonynsimon/bild
     go get -u -v github.com/songtianyi/go-mxnet-predictor
 
-A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/mxnet.Dockerfile) is offered for building development env
 
 ## Part 2. Steps to build flower example
 ##### 2.1 Download model files, mean.bin and input image. Then put them in correct path

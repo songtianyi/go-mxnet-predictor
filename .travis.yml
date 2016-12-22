@@ -1,12 +1,20 @@
+sudo: required
+
 language: go
 
 go:
     - 1.7
+
+addons:
+    apt:
+        packages: 
+		    - gcc-4.8
+			- g++-4.8
+			- libopencv-dev
+			- libatlas-base-dev
     
 before_install:
-    - export LIBRARY_PATH=$LIBRARY_PATH:${PWD}/travis/mxnet/lib/
-    - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${PWD}/travis/mxnet/lib/
-    - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${PWD}/tools/
+    - source travis/env.sh
 
 install:
     - cd travis && git clone https://github.com/dmlc/mxnet.git --recursive && make -j4
