@@ -7,20 +7,18 @@ go:
 
 addons:
     apt:
-        packages: 
-		    - gcc-4.8
-			- g++-4.8
-			- libopencv-dev
-			- libatlas-base-dev
+      packages:
+        - gcc-4.8
+        - g++-4.8
+        - libopencv-dev
+        - libatlas-base-dev
     
 before_install:
     - source travis/env.sh
 
 install:
-    - cd travis && git clone https://github.com/dmlc/mxnet.git --recursive && make -j4
-    # dep for example
-    - go get github.com/anthonynsimon/bild
-    - go get github.com/songtianyi/go-mxnet-predictor
+    # dep
+    - travis/install.sh
 
 script:
     - go build ./examples/flowers/predict.go
