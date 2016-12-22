@@ -47,7 +47,7 @@ Then put them in correct path. These files are shared in dropbox.
 	./predict
 
 ## Part 3. Steps to do inference with go-mxnet-predictor
-##### 3.1 Load pre-trained model and create go predictor
+##### 3.1 Load pre-trained model, mean image and create go predictor
 	// load model
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
 	if err != nil {
@@ -58,6 +58,15 @@ Then put them in correct path. These files are shared in dropbox.
 		panic(err)
 	}
 
+	// load mean image from file
+    nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
+    if err != nil {
+        panic(err)
+    }
+    // free ndarray list operator before exit
+    defer nd.Free()
+
+	// create Predictor
 	p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
 	if err != nil {
 		panic(err)
