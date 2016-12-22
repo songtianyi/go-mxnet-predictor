@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
-go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as original C api, wish further development for higher level APIs.
+go-mxnet-predictor is go binding for mxnet c_predict_api. It's nearly as raw as original C api, wish further development for higher level APIs.
 
 
 ## Part 1. Steps to build your own linux dev environment
