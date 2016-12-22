@@ -9,11 +9,11 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's almost as raw as 
 
 
 ## Part 1. Steps to build your own linux dev environment
----------------
-A [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/gmp.Dockerfile) is offered for building development env. You could skip Part1 by using Docker
+[Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/gmp.Dockerfile) offered for building mxnet and go env. You could skip this part by using Docker
 
-##### 1.1 Install prerequisites
-check [here](http://mxnet.io/get_started/setup.html#prerequisites)
+##### 1.1 Install mxnet prerequisites and go
+* for mxnet prerequisites check [here](http://mxnet.io/get_started/setup.html#prerequisites)
+* for go installation check [here](https://golang.org/doc/install)
 
 ##### 1.2 Get mxnet and build
 	mkdir /root/MXNet/
@@ -23,7 +23,6 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 
 
 ## Part 2. Steps to build and run flower example
-----------------
 ##### 2.1 Get go-mxnet-predictor and do some configuration
 	go get github.com/anthonynsimon/bild
     go get -u -v github.com/songtianyi/go-mxnet-predictor
@@ -37,13 +36,17 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 
 ##### 2.2 Run flowers example
 To run this example, you need to download model files, mean.bin and input image.
-Then put them in correct path. These files are shared in dropbox
+Then put them in correct path. These files are shared in dropbox.
+
+* [102flowers-0260.params](https://www.dropbox.com/s/7l8zye9jpv2bywu/102flowers-0260.params?dl=0)
+* [102flowers-symbol.json](https://www.dropbox.com/s/507hikz8561hwxg/102flowers-symbol.json?dl=0)
+* [flowertest.jpg](https://www.dropbox.com/s/9ej43gpkcdw3q32/flowertest.jpg?dl=0)
+* [mean.bin](https://www.dropbox.com/s/rg45ma97x886i53/mean.bin?dl=0)
 
 ##### 2.3 Run example
 	./predict
 
 ## Part 3. Steps to do inference with go-mxnet-predictor
-----------------
 ##### 3.1 Load pre-trained model and create go predictor
 	// load model
 	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
