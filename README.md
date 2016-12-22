@@ -19,7 +19,7 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
 	cd /root/MXNet/mxnet && make -j2
-	ln -s $MXNET/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
+	ln -s /root/MXNet/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
 
 
 ## Part 2. Steps to build and run flower example
@@ -32,10 +32,14 @@ check [here](http://mxnet.io/get_started/setup.html#prerequisites)
 	cp travis/mxnet.pc /usr/lib/pkgconfig/
 	pkg-config --libs mxnet
 
-##### 2.2 Download model files, mean.bin and input image. Then put them in correct path
-
-##### 2.3 Build and run predict.go
+##### 2.2 Build flowers example
 	go build examples/flowers/predict.go
+
+##### 2.2 Run flowers example
+To run this example, you need to download model files, mean.bin and input image.
+Then put them in correct path. These files are shared in dropbox
+
+##### 2.3 Run example
 	./predict
 
 ## Part 3. Steps to do inference with go-mxnet-predictor
