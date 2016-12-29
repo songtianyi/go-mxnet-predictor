@@ -26,6 +26,22 @@ import (
 	"unsafe"
 )
 
+const (
+	CPU_DEVICE = iota + 1 // cpu device type
+	GPU_DEVICE            // gpu device type
+)
+
+//TODO higher level api like context
+type Device struct {
+	Type int // device type
+	Id   int // device id
+}
+
+type InputNode struct {
+	Key   string   // name
+	Shape []uint32 // shape of ndarray
+}
+
 // predictor for inference
 type Predictor struct {
 	handle C.PredictorHandle // C handle of predictor
