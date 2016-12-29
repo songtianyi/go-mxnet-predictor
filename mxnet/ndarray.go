@@ -42,9 +42,9 @@ type NDItem struct {
 	Size  uint32    // Shape[0]*Shape[1]....Shape[Ndim-1]
 }
 
-// create NDList with a filepath
+// create NDList from file
 // go binding for MXNDListCreate
-// MXNDListCreate will load mutiple ndarray from the file
+// MXNDListCreate will load ndarrays from file data
 func CreateNDListFromFile(filepath string) (*NDList, error) {
 	// read file as binary
 	b, err := ioutil.ReadFile(filepath)
@@ -54,6 +54,38 @@ func CreateNDListFromFile(filepath string) (*NDList, error) {
 	if len(b) < 1 {
 		// empty
 		return nil, fmt.Errorf("empty file")
+	}
+
+	var (
+		handle C.NDListHandle // go gc, *handle c gc!
+		size   uint32         // go gc
+	)
+	// create ndarray list from raw bytes
+	success, err := C.MXNDListCreate((*C.char)(unsafe.Pointer(&b[0])),
+		C.int(len(b)),
+		&handle,
+		(*C.mx_uint)(unsafe.Pointer(&size)),
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	if success < 0 {
+		return nil, GetLastError()
+	}
+	return &NDList{handle: handle, size: size}, nil
+}
+
+// create NDList from bytes
+// go binding for MXNDListCreate
+// MXNDListCreate will load ndarrays from file data
+func CreateNDListFromBytes(b []byte) (*NDList, error) {
+	if b == nil {
+		return nil, fmt.Errorf("input is nil")
+	}
+	if len(b) < 1 {
+		// empty
+		return nil, fmt.Errorf("empty input")
 	}
 
 	var (
