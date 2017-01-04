@@ -18,6 +18,7 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's nearly as raw as 
 ##### 1.2 Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
+	cd /root/MXNet/mxnet && git checkout v0.8.0
 	cd /root/MXNet/mxnet && make -j2
 	ln -s /root/MXNet/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
 
