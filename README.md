@@ -7,7 +7,7 @@
 
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's nearly as raw as original C api, wish further development for higher level APIs. Feel free to join us :)
 
-## Import Notice
+## Important Notice
 MXNet lastest version 0.9.0 has [bug](https://github.com/dmlc/mxnet/issues/4522) in c_predict_api, so don't be confused if you see this
 ```shell
 git checkout v0.8.0
