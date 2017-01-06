@@ -7,12 +7,6 @@
 
 go-mxnet-predictor is go binding for mxnet c_predict_api. It's nearly as raw as original C api, wish further development for higher level APIs. Feel free to join us :)
 
-## Important Notice
-MXNet lastest version 0.9.0 has [bug](https://github.com/dmlc/mxnet/issues/4522) in c_predict_api, so don't be confused if you see this
-```shell
-git checkout v0.8.0
-```
-
 
 ## Part 1. Steps to build your own linux dev environment
 [Dockerfile](https://github.com/songtianyi/docker-dev-envs/blob/master/gmp.Dockerfile) offered for building mxnet and go env. You could skip this part by using Docker
@@ -24,7 +18,6 @@ git checkout v0.8.0
 ##### 1.2 Get mxnet and build
 	mkdir /root/MXNet/
 	cd /root/MXNet/ && git clone https://github.com/dmlc/mxnet.git --recursive
-	cd /root/MXNet/mxnet && git checkout v0.8.0
 	cd /root/MXNet/mxnet && make -j2
 	ln -s /root/MXNet/mxnet/lib/libmxnet.so /usr/lib/libmxnet.so
 
