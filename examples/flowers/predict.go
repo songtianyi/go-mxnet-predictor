@@ -53,9 +53,9 @@ func main() {
 
 	// create predictor
 	p, err := mxnet.CreatePredictor(symbol,
-			params,
-			mxnet.Device{mxnet.CPU_DEVICE, 0},
-			[]mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}},
+		params,
+		mxnet.Device{mxnet.CPU_DEVICE, 0},
+		[]mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}},
 	)
 	if err != nil {
 		panic(err)
