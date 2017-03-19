@@ -81,7 +81,7 @@ func CreatePredictor(symbol []byte,
 
 	var handle C.PredictorHandle
 
-	success, err := C.MXPredCreate((*C.char)(unsafe.Pointer(&symbol[0])),
+	success := C.MXPredCreate((*C.char)(unsafe.Pointer(&symbol[0])),
 		unsafe.Pointer(&params[0]),
 		C.int(len(params)),
 		C.int(device.Type),
@@ -100,9 +100,6 @@ func CreatePredictor(symbol []byte,
 	}
 	C.free(unsafe.Pointer(keys))
 
-	if err != nil {
-		return nil, err
-	}
 	if success < 0 {
 		return nil, GetLastError()
 	}
