@@ -106,6 +106,73 @@ func CreatePredictor(symbol []byte,
 	return &Predictor{handle: handle}, nil
 }
 
+// CreatePredictorPartial Creates a Predictor wich customized outputs [layer]
+// go binding for MXPredCreate
+// param symbol The JSON string of the symbol
+// param params In-memory raw bytes of parameter ndarray file
+// param device Device to run predictor
+// param nodes An array of InputNode which stored the name and shape data of ndarray item
+// param outputKey the name of the output layer/key
+func CreatePredictorPartial(symbol []byte,
+	params []byte,
+	device Device,
+	nodes []InputNode,
+	outputKey string,
+) (*Predictor, error) {
+
+	var (
+		pc        *C.char
+		shapeIdx  = []uint32{0}
+		shapeData = []uint32{}
+	)
+
+	// malloc a **char which like []string to store node keys
+	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc))) // c gc
+	for i := 0; i < len(nodes); i++ {
+		// get memory address
+		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
+		// c gc
+		*p = C.CString(nodes[i].Key)
+
+		// shapeIdx for next node
+		shapeIdx = append(shapeIdx, uint32(len(nodes[i].Shape)))
+		// shape data for current node
+		shapeData = append(shapeData, nodes[i].Shape...)
+	}
+
+	oKeys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc)))
+	p := (**C.char)(unsafe.Pointer(uintptr(oKeys)))
+	*p = C.CString(outputKey)
+
+	var handle C.PredictorHandle
+
+	success := C.MXPredCreatePartialOut((*C.char)(unsafe.Pointer(&symbol[0])),
+		unsafe.Pointer(&params[0]),
+		C.int(len(params)),
+		C.int(device.Type),
+		C.int(device.Id),
+		C.mx_uint(len(nodes)),
+		(**C.char)(keys),
+		(*C.mx_uint)(unsafe.Pointer(&shapeIdx[0])),
+		(*C.mx_uint)(unsafe.Pointer(&shapeData[0])),
+		C.mx_uint(1),
+		(**C.char)(oKeys),
+		&handle,
+	)
+
+	// free mem we created before return, go gc won't do that for us
+	for i := 0; i < len(nodes); i++ {
+		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
+		C.free(unsafe.Pointer(*p))
+	}
+	C.free(unsafe.Pointer(keys))
+
+	if success < 0 {
+		return nil, GetLastError()
+	}
+	return &Predictor{handle: handle}, nil
+}
+
 // set the input data of predictor
 // go binding for MXPredSetInput
 // param key The name of input node to set
