@@ -25,17 +25,17 @@ go-mxnet-predictor is go binding for mxnet c_predict_api. It's as raw as origina
 ## Part 2. Steps to build and run flower example
 ##### 2.1 Get go-mxnet-predictor and do some configuration
 ```shell
-	go get github.com/anthonynsimon/bild
-    go get -u -v github.com/songtianyi/go-mxnet-predictor
-    cd $GOPATH/src/github.com/songtianyi/go-mxnet-predictor	
-	sed -i "/prefix=/c prefix=\/root\/MXNet\/mxnet" travis/mxnet.pc
-	cp travis/mxnet.pc /usr/lib/pkgconfig/
-	pkg-config --libs mxnet
+go get github.com/anthonynsimon/bild
+go get -u -v github.com/songtianyi/go-mxnet-predictor
+cd $GOPATH/src/github.com/songtianyi/go-mxnet-predictor	
+sed -i "/prefix=/c prefix=\/root\/MXNet\/mxnet" travis/mxnet.pc
+cp travis/mxnet.pc /usr/lib/pkgconfig/
+pkg-config --libs mxnet
 ```
 
 ##### 2.2 Build flowers example
 ```shell
-	go build examples/flowers/predict.go
+go build examples/flowers/predict.go
 ```
 
 ##### 2.3 Download example files
@@ -49,7 +49,7 @@ Then put them in correct path. These files are shared in dropbox.
 
 ##### 2.4 Run example
 ```shell
-	./predict
+./predict
 ```
 
 ## Part 3. Steps to do inference with go-mxnet-predictor
