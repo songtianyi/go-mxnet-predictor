@@ -61,12 +61,13 @@ func CreatePredictor(symbol []byte,
 
 	var (
 		pc        *C.char
-		shapeIdx  = []uint32{0}
+		shapeIdx  = []uint32{}
 		shapeData = []uint32{}
 	)
 
 	// malloc a **char which like []string to store node keys
 	keys := C.malloc(C.size_t(len(nodes)) * C.size_t(unsafe.Sizeof(pc))) // c gc
+	j := 0
 	for i := 0; i < len(nodes); i++ {
 		// get memory address
 		p := (**C.char)(unsafe.Pointer(uintptr(keys) + uintptr(i)*unsafe.Sizeof(pc)))
@@ -74,7 +75,9 @@ func CreatePredictor(symbol []byte,
 		*p = C.CString(nodes[i].Key)
 
 		// shapeIdx for next node
-		shapeIdx = append(shapeIdx, uint32(len(nodes[i].Shape)))
+		shapeIdx = append(shapeIdx, uint32(j))
+		shapeIdx = append(shapeIdx, uint32(j+len(nodes[i].Shape)))
+		j += len(nodes[i].Shape)
 		// shape data for current node
 		shapeData = append(shapeData, nodes[i].Shape...)
 	}
