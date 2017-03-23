@@ -55,70 +55,70 @@ Then put them in correct path. These files are shared in dropbox.
 ## Part 3. Steps to do inference with go-mxnet-predictor
 ##### 3.1 Load pre-trained model, mean image and create go predictor
 ```go
-	// load model
-	symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
-	if err != nil {
-		panic(err)
-	}
-	params, err := ioutil.ReadFile("/data/102flowers-0260.params")
-	if err != nil {
-		panic(err)
-	}
+// load model
+symbol, err := ioutil.ReadFile("/data/102flowers-symbol.json")
+if err != nil {
+	panic(err)
+}
+params, err := ioutil.ReadFile("/data/102flowers-0260.params")
+if err != nil {
+	panic(err)
+}
 
-    // load mean image from file
-    nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
-    if err != nil {
-        panic(err)
-    }
+// load mean image from file
+nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
+if err != nil {
+    panic(err)
+}
 
-    // free ndarray list operator before exit
-    defer nd.Free()
+// free ndarray list operator before exit
+defer nd.Free()
 
-	// create Predictor
-	p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
-	if err != nil {
-		panic(err)
-	}
-	defer p.Free()
-	// see more details in examples/flowers/predict.go
+// create Predictor
+p, err := mxnet.CreatePredictor(symbol, params, mxnet.Device{mxnet.CPU_DEVICE, 0}, []mxnet.InputNode{{Key: "data", Shape: []uint32{1, 3, 299, 299}}})
+if err != nil {
+	panic(err)
+}
+defer p.Free()
+// see more details in examples/flowers/predict.go
 ```
 
 ##### 3.2 Load input data and do preprocess
 ```go
-	// load test image for predction
-	img, err := imgio.Open("/data/flowertest.jpg")
-	if err != nil {
-		panic(err)
-	}
-	// preprocess
-	resized := transform.Resize(img, 299, 299, transform.Linear)
-	res, err := utils.CvtImageTo1DArray(resized, item.Data)
-	if err != nil {
-		panic(err)
-	}
+// load test image for predction
+img, err := imgio.Open("/data/flowertest.jpg")
+if err != nil {
+	panic(err)
+}
+// preprocess
+resized := transform.Resize(img, 299, 299, transform.Linear)
+res, err := utils.CvtImageTo1DArray(resized, item.Data)
+if err != nil {
+	panic(err)
+}
 ```
 
 ##### 3.3 Set input data to preditor
 ```go
-	// set input
-	if err := p.SetInput("data", res); err != nil {
-		panic(err)
-	}
+// set input
+if err := p.SetInput("data", res); err != nil {
+	panic(err)
+}
 ```
 ##### 3.4 Do prediction
 ```go
-	// do predict
-	if err := p.Forward(); err != nil {
-		panic(err)
-	}
+// do predict
+if err := p.Forward(); err != nil {
+	panic(err)
+}
 ```
 
 ##### 3.5 Get result
 ```go
-	// get predict result
-	data, err := p.GetOutput(0)
-	if err != nil {
-		panic(err)
-	}
-	// see more details in examples/flowers/predict.go
+// get predict result
+data, err := p.GetOutput(0)
+if err != nil {
+	panic(err)
+}
+// see more details in examples/flowers/predict.go
 ```
