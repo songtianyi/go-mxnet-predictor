@@ -65,11 +65,12 @@ Then put them in correct path. These files are shared in dropbox.
 		panic(err)
 	}
 
-	// load mean image from file
+    // load mean image from file
     nd, err := mxnet.CreateNDListFromFile("/data/mean.bin")
     if err != nil {
         panic(err)
     }
+
     // free ndarray list operator before exit
     defer nd.Free()
 
