@@ -75,7 +75,6 @@ func CreatePredictor(symbol []byte,
 		*p = C.CString(nodes[i].Key)
 
 		// shapeIdx for next node
-		shapeIdx = append(shapeIdx, uint32(j))
 		shapeIdx = append(shapeIdx, uint32(j+len(nodes[i].Shape)))
 		j += len(nodes[i].Shape)
 		// shape data for current node
