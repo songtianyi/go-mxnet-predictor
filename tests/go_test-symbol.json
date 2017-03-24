@@ -1,0 +1,53 @@
+{
+  "nodes": [
+    {
+      "op": "null", 
+      "name": "data", 
+      "inputs": []
+    }, 
+    {
+      "op": "Reshape", 
+      "name": "reshape0", 
+      "attr": {"shape": "(-1)"}, 
+      "inputs": [[0, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "pred_weight", 
+      "attr": {"num_hidden": "10"}, 
+      "inputs": []
+    }, 
+    {
+      "op": "null", 
+      "name": "pred_bias", 
+      "attr": {"num_hidden": "10"}, 
+      "inputs": []
+    }, 
+    {
+      "op": "FullyConnected", 
+      "name": "pred", 
+      "attr": {"num_hidden": "10"}, 
+      "inputs": [[1, 0, 0], [2, 0, 0], [3, 0, 0]]
+    }, 
+    {
+      "op": "null", 
+      "name": "softmax_label", 
+      "inputs": []
+    }, 
+    {
+      "op": "Reshape", 
+      "name": "reshape1", 
+      "attr": {"shape": "(-1)"}, 
+      "inputs": [[5, 0, 0]]
+    }, 
+    {
+      "op": "SoftmaxOutput", 
+      "name": "softmax", 
+      "inputs": [[4, 0, 0], [6, 0, 0]]
+    }
+  ], 
+  "arg_nodes": [0, 2, 3, 5], 
+  "node_row_ptr": [0, 1, 2, 3, 4, 5, 6, 7, 8], 
+  "heads": [[7, 0, 0]], 
+  "attrs": {"mxnet_version": ["int", 904]}
+}
