@@ -40,9 +40,9 @@ func main() {
 		    mxnet.InputNode { Key: "softmax_label", Shape: []uint32{1, 10} },
 		},
 	)
+	defer p.Free()
 	if err != nil {
 		panic(err)
 	}
 
-	defer p.Free()
 }
