@@ -40,12 +40,18 @@ go build examples/flowers/predict.go
 
 ##### 2.3 Download example files
 To run this example, you need to download model files, mean.bin and input image.
-Then put them in correct path. These files are shared in dropbox.
-
+Then put them in correct path. These files are shared in dropbox and baidu storage service.
+###### dropbox
 * [102flowers-0260.params](https://www.dropbox.com/s/7l8zye9jpv2bywu/102flowers-0260.params?dl=0)
 * [102flowers-symbol.json](https://www.dropbox.com/s/507hikz8561hwxg/102flowers-symbol.json?dl=0)
 * [flowertest.jpg](https://www.dropbox.com/s/9ej43gpkcdw3q32/flowertest.jpg?dl=0)
 * [mean.bin](https://www.dropbox.com/s/rg45ma97x886i53/mean.bin?dl=0)
+
+###### pan.baidu.com
+* [102flowers-0260.params](https://pan.baidu.com/s/1qYuHE5A)
+* [102flowers-symbol.json](https://pan.baidu.com/s/1i5sTZY9)
+* [flowertest.jpg](https://pan.baidu.com/s/1skUXirz)
+* [mean.bin](https://pan.baidu.com/s/1kVlyy5x)
 
 ##### 2.4 Run example
 ```shell
