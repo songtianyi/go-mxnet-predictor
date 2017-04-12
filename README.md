@@ -58,6 +58,10 @@ Then put them in correct path. These files are shared in dropbox and baidu stora
 ./predict
 ```
 
+##### 2.5 Python version of flower example
+You might need this
+[mxnet-flower-python](https://github.com/burness/mxnet-101/tree/master/day4)
+
 ## Part 3. Steps to do inference with go-mxnet-predictor
 ##### 3.1 Load pre-trained model, mean image and create go predictor
 ```go
